@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}HealthWeb - 上传数据{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">上传健康数据</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group mb-4">
+                        <label for="file">选择文件或目录:</label>
+                        <div class="upload-options mt-3">
+                            <div class="upload-option mb-3">
+                                <label class="btn btn-outline-primary">
+                                    选择文件
+                                    <input type="file" name="file" id="file" class="d-none">
+                                </label>
+                                <span id="file-name" class="ml-2">未选择文件</span>
+                            </div>
+                            
+                            <div class="upload-option mb-3">
+                                <label class="btn btn-outline-primary">
+                                    选择目录
+                                    <input type="file" name="directory" id="directory" webkitdirectory directory multiple class="d-none">
+                                </label>
+                                <span id="directory-name" class="ml-2">未选择目录</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="上传" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h3 class="card-title mb-0">如何导出您的Apple健康数据</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4>步骤：</h4>
+                        <ol>
+                            <li>在iPhone上打开健康应用</li>
+                            <li>点击右上角的个人头像或个人资料</li>
+                            <li>向下滚动至底部，找到"导出所有健康数据"选项</li>
+                            <li>点击"导出"，然后等待数据导出完成</li>
+                            <li>选择一种方式分享导出的ZIP文件（例如，AirDrop、邮件等）</li>
+                            <li>将文件传输到您的计算机</li>
+                            <li>在本页面上传ZIP文件或解压后的export.xml文件</li>
+                        </ol>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4>注意事项：</h4>
+                        <ul>
+                            <li>导出过程可能需要几分钟到几十分钟，取决于您的数据量</li>
+                            <li>导出的ZIP文件可能较大（几十MB到几百MB）</li>
+                            <li>所有数据处理都在您的浏览器本地进行，不会上传到服务器</li>
+                            <li>您可以直接上传ZIP文件，或者解压后上传其中的export.xml文件</li>
+                            <li>如果遇到文件过大的问题，请尝试仅上传export.xml文件</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h3 class="card-title mb-0">隐私保障</h3>
+            </div>
+            <div class="card-body">
+                <p>我们高度重视您的健康数据隐私：</p>
+                <ul>
+                    <li>所有数据处理都在本地完成，您的健康数据不会被发送到任何远程服务器</li>
+                    <li>您的数据仅在当前浏览器会话中使用，关闭浏览器后将被清除</li>
+                    <li>任何时候您都可以点击顶部导航栏中的"清除数据"按钮移除所有数据</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  document.getElementById('file').addEventListener('change', function(e) {
+    document.getElementById('file-name').textContent = e.target.files[0] ? e.target.files[0].name : '未选择文件';
+    // 如果选择了文件，清空目录选择
+    if (e.target.files[0]) {
+      document.getElementById('directory').value = '';
+      document.getElementById('directory-name').textContent = '未选择目录';
+    }
+  });
+  
+  document.getElementById('directory').addEventListener('change', function(e) {
+    document.getElementById('directory-name').textContent = e.target.files.length > 0 ? 
+      `已选择目录（${e.target.files.length}个文件）` : '未选择目录';
+    // 如果选择了目录，清空文件选择
+    if (e.target.files.length > 0) {
+      document.getElementById('file').value = '';
+      document.getElementById('file-name').textContent = '未选择文件';
+    }
+  });
+</script>
+{% endblock %} 

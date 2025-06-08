@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}HealthWeb - 首页{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="display-4 mb-4">欢迎使用 HealthWeb</h1>
+                <p class="lead">您的个人Apple健康数据分析平台</p>
+                
+                {% if has_data %}
+                <hr class="my-4">
+                <p>您已上传数据并准备好进行分析</p>
+                <div class="mt-4">
+                    <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary btn-lg">查看仪表板</a>
+                    <a href="{{ url_for('analysis.index') }}" class="btn btn-success btn-lg ms-3">分析数据</a>
+                </div>
+                {% else %}
+                <hr class="my-4">
+                <p>开始使用前，请先上传您的Apple健康数据</p>
+                <div class="mt-4">
+                    <a href="{{ url_for('upload.upload_file') }}" class="btn btn-primary btn-lg">上传数据</a>
+                </div>
+                <div class="card mt-5 mb-4">
+                    <div class="card-header bg-light">
+                        <h4>如何获取您的Apple健康数据</h4>
+                    </div>
+                    <div class="card-body">
+                        <ol class="text-start">
+                            <li>在iPhone上打开Health应用（健康）</li>
+                            <li>点击右上角的个人资料图标</li>
+                            <li>向下滚动，点击"导出所有健康数据"</li>
+                            <li>导出过程可能需要几分钟，取决于您的数据量</li>
+                            <li>使用AirDrop、邮件或其他方式将导出的ZIP文件传输到您的计算机</li>
+                            <li>在本网站上传ZIP文件或解压后的export.xml文件</li>
+                        </ol>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="bi bi-heart-pulse"></i> 心脏健康</h3>
+                        <p class="card-text">分析您的心率数据，了解心脏健康状况。识别异常模式和趋势。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="bi bi-activity"></i> 压力管理</h3>
+                        <p class="card-text">通过心率变异性和其他指标评估您的压力水平，提供压力管理建议。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="bi bi-person-walking"></i> 健身活动</h3>
+                        <p class="card-text">跟踪您的步数、距离和锻炼情况，分析活动模式并设定目标。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

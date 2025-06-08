@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+
+{% block title %}HealthWeb - 健康摘要{% endblock %}
+
+{% block head %}
+<style>
+    .health-score {
+        font-size: 3.5rem;
+        font-weight: bold;
+    }
+    .score-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .status-label {
+        font-size: 0.9rem;
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+    .status-good {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .status-warning {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    .status-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .health-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">健康数据摘要</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2 text-center mb-4">
+                        <p class="lead">根据您的Apple健康数据，我们生成了以下健康状况摘要报告。</p>
+                        <p class="text-muted small">注意：此摘要仅基于可用数据生成，不构成医疗建议。如有健康问题，请咨询专业医疗人员。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-4">
+        {% if summary.get('heart_rate') %}
+        <div class="card h-100">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="bi bi-heart-pulse"></i> 心脏健康</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="health-icon text-danger">
+                    <i class="bi bi-heart-pulse-fill"></i>
+                </div>
+                <h4>平均心率</h4>
+                <div class="score-container mb-3">
+                    <span class="health-score">{{ summary.heart_rate.average|float|round(0)|int }}</span>
+                </div>
+                <p>bpm（每分钟心跳次数）</p>
+                
+                <hr class="my-3">
+                
+                <div class="mb-3">
+                    <span class="status-label 
+                        {% if summary.heart_rate.status == '正常' %}status-good
+                        {% elif summary.heart_rate.status == '偏低' %}status-warning
+                        {% else %}status-danger{% endif %}">
+                        {{ summary.heart_rate.status }}
+                    </span>
+                </div>
+                
+                <p class="card-text">
+                    {% if summary.heart_rate.status == '正常' %}
+                    您的平均心率在正常范围内（60-100 bpm）。良好的心率表明心脏运作状况良好。
+                    {% elif summary.heart_rate.status == '偏低' %}
+                    您的平均心率略低于正常范围（低于60 bpm）。这可能是良好体能状态的表现，但如果伴随不适症状，请咨询医生。
+                    {% else %}
+                    您的平均心率高于正常范围（高于100 bpm）。适度运动、压力管理和保持健康生活方式可能有助于改善心率。如果持续偏高，建议咨询医生。
+                    {% endif %}
+                </p>
+                
+                <div class="mt-3">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>最低心率:</span>
+                            <strong>{{ summary.heart_rate.min|float|round(0)|int }} bpm</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>最高心率:</span>
+                            <strong>{{ summary.heart_rate.max|float|round(0)|int }} bpm</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        {% if summary.get('steps') %}
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="bi bi-person-walking"></i> 活动水平</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="health-icon text-primary">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <h4>平均步数</h4>
+                <div class="score-container mb-3">
+                    <span class="health-score">{{ summary.steps.average|float|round(0)|int }}</span>
+                </div>
+                <p>每日平均步数</p>
+                
+                <hr class="my-3">
+                
+                <div class="mb-3">
+                    <span class="status-label 
+                        {% if summary.steps.activity_level == '高活动量' %}status-good
+                        {% elif summary.steps.activity_level == '中高活动量' %}status-good
+                        {% elif summary.steps.activity_level == '中等活动量' %}status-warning
+                        {% else %}status-danger{% endif %}">
+                        {{ summary.steps.activity_level }}
+                    </span>
+                </div>
+                
+                <p class="card-text">
+                    {% if summary.steps.activity_level == '高活动量' %}
+                    您的活动水平非常好！保持每天10,000步以上的水平有助于维持心血管健康和整体健康状况。
+                    {% elif summary.steps.activity_level == '中高活动量' %}
+                    您的活动水平良好。保持7,500-10,000步的活动量能够提供显著的健康益处。
+                    {% elif summary.steps.activity_level == '中等活动量' %}
+                    您的活动水平适中。尝试增加日常活动，目标是每天至少7,500步，以提高健康水平。
+                    {% else %}
+                    您的活动水平较低。增加日常步行和其他体力活动可以提升健康状况，建议逐步增加活动量，目标是每天5,000步以上。
+                    {% endif %}
+                </p>
+                
+                <div class="mt-3">
+                    <div class="progress mb-3" style="height: 20px;">
+                        {% if summary.steps.average >= 10000 %}
+                            {% set progress = 100 %}
+                        {% else %}
+                            {% set progress = (summary.steps.average|float / 10000 * 100)|round(0)|int %}
+                        {% endif %}
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ progress }}%">{{ progress }}%</div>
+                    </div>
+                    <small class="text-muted">目标: 10,000 步/天</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        {% if summary.get('sleep') %}
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0"><i class="bi bi-moon"></i> 睡眠健康</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="health-icon text-info">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </div>
+                <h4>平均睡眠时长</h4>
+                <div class="score-container mb-3">
+                    <span class="health-score">{{ summary.sleep.average|float|round(1) }}</span>
+                </div>
+                <p>小时/天</p>
+                
+                <hr class="my-3">
+                
+                <div class="mb-3">
+                    <span class="status-label 
+                        {% if summary.sleep.status == '正常' %}status-good
+                        {% elif summary.sleep.status == '睡眠不足' %}status-danger
+                        {% else %}status-warning{% endif %}">
+                        {{ summary.sleep.status }}
+                    </span>
+                </div>
+                
+                <p class="card-text">
+                    {% if summary.sleep.status == '正常' %}
+                    您的睡眠时长在健康范围内（7-9小时）。良好的睡眠有助于身体恢复、提高认知功能和增强免疫系统。
+                    {% elif summary.sleep.status == '睡眠不足' %}
+                    您的睡眠时间低于建议水平。尝试调整作息时间，创造有利于睡眠的环境，减少睡前使用电子设备的时间。
+                    {% else %}
+                    您的睡眠时间超过一般建议。虽然个人需求有所不同，但长时间睡眠有时可能与某些健康问题相关。如果长期睡眠过多并伴随其他症状，建议咨询医生。
+                    {% endif %}
+                </p>
+                
+                <div class="mt-3">
+                    <div class="progress mb-3" style="height: 20px;">
+                        {% if summary.sleep.average >= 9 %}
+                            {% set progress = 100 %}
+                        {% else %}
+                            {% set progress = (summary.sleep.average|float / 8 * 100)|round(0)|int %}
+                            {% if progress > 100 %}
+                                {% set progress = 100 %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ progress }}%">{{ progress }}%</div>
+                    </div>
+                    <small class="text-muted">推荐: 7-9 小时/天</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        {% if summary.get('stress') %}
+        <div class="card h-100">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0"><i class="bi bi-graph-up"></i> 压力水平</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="health-icon text-warning">
+                    <i class="bi bi-alarm"></i>
+                </div>
+                <h4>压力指数</h4>
+                <div class="score-container mb-3">
+                    <span class="health-score">{{ summary.stress.average|float|round(1) }}</span>
+                </div>
+                <p>基于心率变异性估算</p>
+                
+                <hr class="my-3">
+                
+                <div class="mb-3">
+                    <span class="status-label 
+                        {% if summary.stress.level == '低压力' %}status-good
+                        {% elif summary.stress.level == '中等压力' %}status-warning
+                        {% else %}status-danger{% endif %}">
+                        {{ summary.stress.level }}
+                    </span>
+                </div>
+                
+                <p class="card-text">
+                    {% if summary.stress.level == '低压力' %}
+                    您的压力水平较低，这是身心健康的表现。继续保持均衡的生活方式和有效的压力管理策略。
+                    {% elif summary.stress.level == '中等压力' %}
+                    您的压力水平适中。适度的压力是正常的，但请确保有足够的休息和放松时间。考虑尝试冥想、深呼吸或其他减压技巧。
+                    {% else %}
+                    您的压力水平较高。长期高压可能对健康产生负面影响。建议增加休息时间，尝试放松技巧，必要时寻求专业支持。
+                    {% endif %}
+                </p>
+                
+                <div class="mt-3">
+                    <div class="progress mb-3" style="height: 20px;">
+                        {% set stress_percent = (summary.stress.average|float / 15 * 100)|round(0)|int %}
+                        {% if stress_percent > 100 %}
+                            {% set stress_percent = 100 %}
+                        {% endif %}
+                        
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ stress_percent }}%">{{ stress_percent }}%</div>
+                    </div>
+                    <small class="text-muted">压力评估比例</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h3 class="mb-0">健康改善建议</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- 心脏健康建议 -->
+                    {% if summary.get('heart_rate') %}
+                    <div class="col-md-6 mb-4">
+                        <h4><i class="bi bi-heart-pulse text-danger"></i> 心脏健康</h4>
+                        <ul class="list-group list-group-flush">
+                            {% if summary.heart_rate.status == '偏高' %}
+                            <li class="list-group-item">定期进行有氧运动，如快走、游泳或骑自行车</li>
+                            <li class="list-group-item">减少咖啡因和酒精摄入</li>
+                            <li class="list-group-item">保持健康体重，减少高盐和高脂食物</li>
+                            <li class="list-group-item">学习并实践压力管理技巧</li>
+                            <li class="list-group-item">确保充足的睡眠</li>
+                            {% elif summary.heart_rate.status == '偏低' %}
+                            <li class="list-group-item">确保摄入足够的水分</li>
+                            <li class="list-group-item">维持均衡饮食，确保足够的营养</li>
+                            <li class="list-group-item">如感到头晕或疲劳，请咨询医生</li>
+                            <li class="list-group-item">根据个人情况调整锻炼强度</li>
+                            {% else %}
+                            <li class="list-group-item">继续保持健康生活方式</li>
+                            <li class="list-group-item">定期进行有氧运动</li>
+                            <li class="list-group-item">保持均衡饮食</li>
+                            <li class="list-group-item">定期监测心率变化</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- 活动建议 -->
+                    {% if summary.get('steps') %}
+                    <div class="col-md-6 mb-4">
+                        <h4><i class="bi bi-person-walking text-primary"></i> 活动建议</h4>
+                        <ul class="list-group list-group-flush">
+                            {% if summary.steps.activity_level in ['低活动量', '中等活动量'] %}
+                            <li class="list-group-item">设定每日步数目标，逐步增加</li>
+                            <li class="list-group-item">工作时每小时起身活动几分钟</li>
+                            <li class="list-group-item">选择步行代替短距离驾车</li>
+                            <li class="list-group-item">使用楼梯代替电梯</li>
+                            <li class="list-group-item">考虑加入步行团体或寻找步行伙伴增加动力</li>
+                            {% else %}
+                            <li class="list-group-item">保持当前活动水平</li>
+                            <li class="list-group-item">考虑增加强度训练以提高整体健康</li>
+                            <li class="list-group-item">确保在高活动量的日子有足够的休息和恢复</li>
+                            <li class="list-group-item">注意保持良好的步行姿势</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- 睡眠建议 -->
+                    {% if summary.get('sleep') %}
+                    <div class="col-md-6 mb-4">
+                        <h4><i class="bi bi-moon text-info"></i> 睡眠建议</h4>
+                        <ul class="list-group list-group-flush">
+                            {% if summary.sleep.status == '睡眠不足' %}
+                            <li class="list-group-item">建立规律的睡眠时间表</li>
+                            <li class="list-group-item">减少睡前屏幕使用时间</li>
+                            <li class="list-group-item">创造有利于睡眠的环境：暗、静、凉爽</li>
+                            <li class="list-group-item">睡前避免咖啡因和大量饮食</li>
+                            <li class="list-group-item">尝试睡前放松活动：读书、轻音乐或冥想</li>
+                            {% elif summary.sleep.status == '睡眠过多' %}
+                            <li class="list-group-item">尝试设定固定的起床时间</li>
+                            <li class="list-group-item">增加日间活动量</li>
+                            <li class="list-group-item">确保睡眠环境健康</li>
+                            <li class="list-group-item">如持续感到疲劳，考虑咨询医生</li>
+                            {% else %}
+                            <li class="list-group-item">继续保持当前良好的睡眠习惯</li>
+                            <li class="list-group-item">如季节或工作变化，及时调整睡眠计划</li>
+                            <li class="list-group-item">关注睡眠质量，而不仅是时长</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- 压力管理建议 -->
+                    {% if summary.get('stress') %}
+                    <div class="col-md-6 mb-4">
+                        <h4><i class="bi bi-graph-up text-warning"></i> 压力管理</h4>
+                        <ul class="list-group list-group-flush">
+                            {% if summary.stress.level == '高压力' %}
+                            <li class="list-group-item">学习并实践深呼吸或冥想技巧</li>
+                            <li class="list-group-item">增加体育活动以释放压力</li>
+                            <li class="list-group-item">培养兴趣爱好作为放松方式</li>
+                            <li class="list-group-item">限制咖啡因摄入，增加睡眠时间</li>
+                            <li class="list-group-item">考虑寻求专业心理支持</li>
+                            {% elif summary.stress.level == '中等压力' %}
+                            <li class="list-group-item">学习基本的压力管理技巧</li>
+                            <li class="list-group-item">保持规律的体育活动</li>
+                            <li class="list-group-item">优先处理重要事务，学会说"不"</li>
+                            <li class="list-group-item">保持社交联系和情感支持</li>
+                            {% else %}
+                            <li class="list-group-item">继续保持良好的压力管理策略</li>
+                            <li class="list-group-item">定期评估生活平衡状况</li>
+                            <li class="list-group-item">与他人分享您的成功经验</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center mb-4">
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary">返回仪表板</a>
+        <a href="{{ url_for('analysis.index') }}" class="btn btn-success ms-2">查看详细分析</a>
+    </div>
+</div>
+{% endblock %} 
