@@ -3,7 +3,7 @@
 #注意
 此项目不再维护
 不支持英文
-
+#Note: This project is no longer maintained and does not support English
 
 ## ✨ 核心特色
 
