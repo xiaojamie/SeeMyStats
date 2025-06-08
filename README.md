@@ -1,4 +1,4 @@
-# HealthWeb - apple watch数据分析平台 
+# SeeMyStats - apple watch数据分析平台 
 
 #注意
 此项目不再维护
