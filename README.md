@@ -17,7 +17,7 @@
 - **自由套索选择 (Lasso Select):** 任意形状的数据点选择。
 - **多层次缩放 (Multi-level Zoom):** 从宏观趋势到微观细节的无缝缩放。
 
-### 🧠 智能数据分析 / Data Analysis
+### 🧠 数据分析 / Data Analysis
 - **多维相关性分析 (Multivariate Correlation):** 发现不同健康指标间的关联。
 - **统计显著性检验 (Statistical Significance Testing):** 科学验证数据关联性。
 
