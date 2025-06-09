@@ -21,6 +21,7 @@
 - **多维相关性分析 (Multivariate Correlation):** 发现不同健康指标间的关联。
 - **统计显著性检验 (Statistical Significance Testing):** 科学验证数据关联性。
 
+![](image/stat.png)
 ## 🚀 功能模块 / Features
 
 ### 📊 仪表板系统 (Dashboard)
