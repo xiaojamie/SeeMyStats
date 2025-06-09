@@ -27,7 +27,7 @@
 - 实时健康数据概览 / Real-time health overview
 - 多指标综合展示 / Multi-metric visualization
 
-![仪表板](images/dashbord.png)
+![仪表板](image/dashbord.png)
 
 ### 📱 数据管理 (Data Management)
 - Apple Health XML 数据导入 / Apple Health XML import
