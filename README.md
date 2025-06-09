@@ -34,7 +34,7 @@
 - 多格式数据支持 / Multi-format data support
 - 数据清洗与预处理 / Data cleaning & preprocessing
 
-![](images/report.png)
+![](image/report.png)
 
 ## 🛠️ 技术架构 / Tech Stack
 
