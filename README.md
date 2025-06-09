@@ -1,4 +1,4 @@
-# SeeMyStats - Apple Watch 数据分析平台 / Data Analysis Platform
+# SeeMyStats - Apple Watch 数据分析平台 / Data visualizations Platform
 
 > **注意 / Note:**  
 > 此项目不再维护，不支持英文。  
