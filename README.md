@@ -3,6 +3,8 @@
 > **注意 / Note:**  
 > 此项目不再维护，不支持英文。  
 > This project is no longer maintained and does not support English.
+This project is for demonstration and educational use only. All visualizations shown do not constitute medical advice.
+Please do not rely on this system for clinical decisions. Consult licensed medical professionals if you have health concerns.
 
 ## ✨ 核心特色 / Core Features
 
@@ -108,7 +110,7 @@ python run.py
 
 🙏 致谢 / Acknowledgements
 
-Apple Health 团队提供数据标准 / Apple Health Data Standards
+Apple Health 团队提供数据标准 / Apple Health team
 
 Plotly 社区提供优秀可视化库 / Plotly team
 
