@@ -61,7 +61,7 @@ BeautifulSoup 4.12.2
 lxml 4.9.3
 ```
 
-![](images/data.png)
+![](image/data.png)
 
 ## 📦 快速开始 / Quick Start
 
